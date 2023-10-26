@@ -1,6 +1,8 @@
 from langchain.chat_models import ChatOpenAI
+from dotenv import load_dotenv
 import streamlit as st
 
+load_dotenv()
 chat_model = ChatOpenAI()
 
 st.title('KT 인공지능 서비스')
