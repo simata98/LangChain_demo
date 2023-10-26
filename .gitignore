@@ -1,1 +1,3 @@
-.env
+# rm personal key file
+*.env
+*.env.toml

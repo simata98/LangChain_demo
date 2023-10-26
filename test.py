@@ -1,7 +1,14 @@
+from dotenv import load_dotenv
+# from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 import streamlit as st
 
+load_dotenv()
+# llm = OpenAI()
 chat_model = ChatOpenAI()
+
+# result = llm.predict("고양이는 어떤 동물이야?")
+# print(result2)
 
 st.title('KT 인공지능 서비스')
 st.title('_LLM_ 과 _LangChain_은 :blue[cool] :sunglasses:')
