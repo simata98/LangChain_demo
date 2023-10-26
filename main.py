@@ -9,11 +9,7 @@ st.title('_LLM_ 과 _LangChain_ 은 :blue[cool] :sunglasses:')
 content = st.text_input('시의 주제를 제시해주세요')
 st.write('입력 받은 시의 주제는', content)
 
-if st.button('시 작성 요청하기'):
-    with st.spinner('시 작성 중입니다...'):
-        result = chat_model.predict(content + "에 대한 시를 써줘")
+if st.button('별명 생성하기'):
+    with st.spinner('별명 생성 중입니다...'):
+        result = chat_model.predict(content + "에 관련된 별명을 지어줘")
         st.write(result)
-
-
-
-
