@@ -1,4 +1,4 @@
-import sys
+from dotenv import load_dotenv
 import tiktoken
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -10,22 +10,19 @@ from langchain.chains import RetrievalQA
 import streamlit as st
 import tempfile
 import os
-
-# connect sqlite
-__import__("pysqlite3")
-sys.modeules["sqlite3"] = sys.modeules.pop("pysqlite3")
+load_dotenv()
 
 # streamlit
-st.title("KT 인공지능 서비스")
-st.write("KT 인공지능 서비스는 _LLM_ 과 _LangChain_ 을 활용하여 만들어졌습니다.")
+st.title('KT 인공지능 서비스')
+st.write('KT 인공지능 서비스는 _LLM_ 과 _LangChain_ 을 활용하여 만들어졌습니다.')
 
-uploaded_file = st.file_uploader("PDF파일을 업로드 해주세요", type=['pdf'])
+uploaded_file = st.file_uploader("Choose a file")
 
 
 def pdf_to_document(uploaded_file):
     temp_dir = tempfile.TemporaryDirectory()
     temp_tilepath = os.path.join(temp_dir.name, uploaded_file.name)
-    with open(temp_tilepath, "wb") as f:
+    with open(temp_tilepath, 'wb') as f:
         f.write(uploaded_file.getvalue())
     loader = PyPDFLoader(temp_tilepath)
     pages = loader.load_and_split()
@@ -56,14 +53,15 @@ if uploaded_file is not None:
     # load it into chroma
     db = Chroma.from_documents(texts, embeddings_model)
 
-    st.header("PDF에게 질문해보세요!")
-    question = st.text_input("질문을 입력하세요")
-    if st.button("질문하기"):
-        with st.spinner("Wait for it..."):
+    st.header('PDF에게 질문해보세요!')
+    question = st.text_input('질문을 입력하세요')
+    if st.button('질문하기'):
+        with st.spinner('Wait for it...'):
             llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
-            qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
+            qa_chain = RetrievalQA.from_chain_type(llm,
+                                                   retriever=db.as_retriever())
             result = qa_chain({"query": question})
-            st.write(result["result"])
+            st.write(result['result'])
 
 
 # db 저장 후 임베딩 불러오기

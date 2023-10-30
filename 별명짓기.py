@@ -13,5 +13,5 @@ st.write('당신의 이름은', content)
 
 if st.button('별명 생성하기'):
     with st.spinner('별명 생성 중입니다...'):
-        result = chat_model.predict(content + "에 관련된 웃긴 별명을 지어줘. 예를 들어 '이정형'을 입력 받으면, '정형외과' 이런 식으로")
+        result = chat_model.predict(content + "에 해당하는 이름을 활용해 별명을 지어줘. 예를 들어 '이정형'을 입력 받으면, '정형외과' 이런 식으로")
         st.write(result)
