@@ -23,6 +23,9 @@ st.title("KT 인공지능 서비스")
 st.write("KT 인공지능 서비스는 _LLM_ 과 _LangChain_ 을 활용하여 만들어졌습니다.")
 st.write("---")
 
+# OpenAi 키 받기
+openai_key = st.text_input("Open_AI_API_KEY", type="password")
+
 uploaded_file = st.file_uploader("PDF파일을 업로드 해주세요", type=['pdf'])
 st.write("---")
 
@@ -42,9 +45,6 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     num_tokens = len(encoding.encode(string))
     return num_tokens
 
-
-# OpenAi 키 받기
-openai_key = st.text_input("Open_AI_API_KEY", type="password")
 
 if uploaded_file is not None:
     pages = pdf_to_document(uploaded_file)
