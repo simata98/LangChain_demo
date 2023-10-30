@@ -10,16 +10,21 @@ from langchain.chains import RetrievalQA
 import streamlit as st
 import tempfile
 import os
+from streamlit_extras.buy_me_a_coffee import button
 
 # connect sqlite
 __import__("pysqlite3")
 sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
+button(username="c4nd0it", floating=True, width=221)
+
 # streamlit
 st.title("KT 인공지능 서비스")
 st.write("KT 인공지능 서비스는 _LLM_ 과 _LangChain_ 을 활용하여 만들어졌습니다.")
+st.write("---")
 
 uploaded_file = st.file_uploader("PDF파일을 업로드 해주세요", type=['pdf'])
+st.write("---")
 
 
 def pdf_to_document(uploaded_file):
@@ -38,6 +43,9 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     return num_tokens
 
 
+# OpenAi 키 받기
+openai_key = st.text_input("Open_AI_API_KEY", type="password")
+
 if uploaded_file is not None:
     pages = pdf_to_document(uploaded_file)
 
@@ -51,7 +59,7 @@ if uploaded_file is not None:
     texts = text_splitter.split_documents(pages)
 
     # Embedding
-    embeddings_model = OpenAIEmbeddings()
+    embeddings_model = OpenAIEmbeddings(openai_api_key=openai_key)
 
     # load it into chroma
     db = Chroma.from_documents(texts, embeddings_model)
@@ -60,8 +68,10 @@ if uploaded_file is not None:
     question = st.text_input("질문을 입력하세요")
     if st.button("질문하기"):
         with st.spinner("Wait for it..."):
-            llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
-            qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
+            llm = ChatOpenAI(model_name="gpt-4",
+                             temperature=0, openai_api_key=openai_key)
+            qa_chain = RetrievalQA.from_chain_type(llm,
+                                                   retriever=db.as_retriever())
             result = qa_chain({"query": question})
             st.write(result["result"])
 
