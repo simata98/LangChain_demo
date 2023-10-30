@@ -13,7 +13,7 @@ import os
 
 # connect sqlite
 __import__("pysqlite3")
-sys.modeules["sqlite3"] = sys.modeules.pop("pysqlite3")
+sys.modules["sqlite3"] = sys.modeules.pop("pysqlite3")
 
 # streamlit
 st.title("KT 인공지능 서비스")
