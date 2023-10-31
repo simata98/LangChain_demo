@@ -6,3 +6,4 @@ chromadb
 tiktoken
 pysqlite3-binary
 streamlit-extras
+google-cloud-firestore
