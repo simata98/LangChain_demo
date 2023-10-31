@@ -37,17 +37,6 @@ yesterday_visit_doc = yesterday_visit_ref.get()
 
 button(username="c4nd0it", floating=True, width=221)
 
-# streamlit
-st.title("KT 인공지능 서비스")
-st.write("KT 인공지능 서비스는 _LLM_ 과 _LangChain_ 을 활용하여 만들어졌습니다.")
-st.write("---")
-
-# OpenAi 키 받기
-openai_key = st.text_input("Open_AI_API_KEY", type="password")
-
-uploaded_file = st.file_uploader("PDF파일을 업로드 해주세요", type=['pdf'])
-st.write("---")
-
 
 def rain_drop():
     rain(
