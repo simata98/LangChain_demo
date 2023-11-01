@@ -14,11 +14,14 @@ from streamlit_extras.let_it_rain import rain
 from streamlit_extras.metric_cards import style_metric_cards
 from google.cloud import firestore
 import datetime
-from datetime import date
+import pytz
+
+# 한국 시간대 설정
+korea_tz = pytz.timezone('Asia/Seoul')
 
 # FireStore 연결 및 값 불러오기
 db = firestore.Client.from_service_account_json('llm-service-9990d-firebase-adminsdk-kzzo8-875179b253.json')
-today = date.today()
+today = datetime.datetime.now(tz=korea_tz).date()
 today_date_str = today.strftime("%Y-%m-%d")
 yesterday_date_str = (today - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 today_count_ref = db.collection('daily_counts').document(today_date_str)
@@ -29,6 +32,15 @@ today_visit_ref = db.collection('daily_counts').document(today_date_str)
 yesterday_visit_ref = db.collection('daily_counts').document(yesterday_date_str)
 today_visit_doc = today_visit_ref.get()
 yesterday_visit_doc = yesterday_visit_ref.get()
+
+if not today_count_doc.exists:
+    usage_count = 0
+    today_count_ref.set({'usage_count': usage_count, 'visit_count': 0})
+    print(f'daily_count created : {today_date_str}')
+else:
+    usage_count = today_count_doc.get('usage_count')
+    today_visit_ref.update({'visit_count': today_visit_doc.get('visit_count') + 1})
+    print(f'daily_count exists : {today_date_str}')
 
 
 def rain_drop():
@@ -42,15 +54,6 @@ def rain_drop():
 
 # 사용 현황 업데이트
 def metric_card():
-    if not today_count_doc.exists:
-        usage_count = 0
-        today_count_ref.set({'usage_count': usage_count, 'visit_count': 0})
-        print(f'daily_count created : {today_date_str}')
-    else:
-        usage_count = today_count_doc.get('usage_count')
-        today_visit_ref.update({'visit_count': today_visit_doc.get('visit_count') + 1})
-        print(f'daily_count exists : {today_date_str}')
-
     col1, col2 = st.columns(2)
     col1.metric(label="총 실행횟수",
                 value=today_count_doc.get('usage_count'),
