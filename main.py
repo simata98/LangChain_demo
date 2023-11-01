@@ -62,10 +62,10 @@ def rain_drop():
 # 사용 현황 업데이트
 def metric_card():
     col1, col2 = st.columns(2)
-    col1.metric(label="총 실행횟수",
+    col1.metric(label="금일 총 실행횟수",
                 value=today_count_doc.get('usage_count'),
                 delta=today_count_doc.get('usage_count') - yesterday_count_doc.get('usage_count'))
-    col2.metric(label="총 방문횟수",
+    col2.metric(label="금일 총 방문횟수",
                 value=today_count_doc.get('visit_count'),
                 delta=today_count_doc.get('visit_count') - yesterday_count_doc.get('visit_count'))
     style_metric_cards(background_color='#5fdcde')
